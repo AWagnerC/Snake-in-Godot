@@ -27,6 +27,8 @@ var snake_fed = false
 # o id do tilemap dos obsátuclos é 2. Esta variável armazena a posição de todos os tiles 2.
 onready var obstacle = $Grid.get_used_cells_by_id(2)
 
+var can_move = true
+
 func _ready():
 	def_grid_size()
 	place_food_in_random_position()
@@ -40,14 +42,18 @@ func def_grid_size():
 # Movimento da cobra
 func _input(_event):
 	# evitar o movimento inverso da cobra, ou seja, se está indo pra direita, não pode apertar para a esquerda
-	if Input.is_action_just_pressed("ui_right") and snake_direction != Vector2.LEFT: 
+	if Input.is_action_just_pressed("ui_right") and snake_direction != Vector2.LEFT and can_move: 
 		snake_direction = Vector2.RIGHT
-	elif Input.is_action_just_pressed("ui_left") and snake_direction != Vector2.RIGHT: 
+		can_move = false
+	elif Input.is_action_just_pressed("ui_left") and snake_direction != Vector2.RIGHT and can_move: 
 		snake_direction = Vector2.LEFT
-	elif Input.is_action_just_pressed("ui_up") and snake_direction != Vector2.DOWN: 
+		can_move = false
+	elif Input.is_action_just_pressed("ui_up") and snake_direction != Vector2.DOWN and can_move: 
 		snake_direction = Vector2.UP
-	elif Input.is_action_just_pressed("ui_down") and snake_direction != Vector2.UP: 
+		can_move = false
+	elif Input.is_action_just_pressed("ui_down") and snake_direction != Vector2.UP and can_move: 
 		snake_direction = Vector2.DOWN
+		can_move = false
 
 # Definir a posição aleatória do alimento no grid
 func place_food_in_random_position():
@@ -131,6 +137,7 @@ func _on_Timer_timeout():
 	draw_snake()
 	# Checar se a cobra alcançou o alimento. Esta checagem também poderia ser colocada em process
 	check_food_eaten()
+	can_move = true
 	
 func check_game_over():
 	var head = snake_body[0]
