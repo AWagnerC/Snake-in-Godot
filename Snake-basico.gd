@@ -2,7 +2,7 @@
 extends Node2D
 
 
-# O valor da constante é baseado nos ids dos objetos no tilemap
+# O valor da constante é baseado nos ids dos objetos no tilemap. Serão usados três tiles no TileMap, conforme IDs.
 const FOOD = 0
 const SNAKE = 1
 const TAIL = 2
